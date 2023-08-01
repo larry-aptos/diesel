@@ -50,7 +50,7 @@ fn migration_run_inserts_run_on_timestamps() {
     );
 
     let migrations_done: bool = select(sql::<Bool>(
-        "EXISTS (SELECT * FROM __diesel_schema_migrations WHERE version >= '1')",
+        "EXISTS (SELECT * FROM diesel_schema_migrations WHERE version >= '1')",
     ))
     .get_result(&mut db.conn())
     .unwrap();
@@ -67,7 +67,7 @@ fn migration_run_inserts_run_on_timestamps() {
     #[cfg(feature = "sqlite")]
     fn valid_run_on_timestamp(db: &database::Database) -> bool {
         select(sql::<Bool>(
-            "EXISTS (SELECT 1 FROM __diesel_schema_migrations \
+            "EXISTS (SELECT 1 FROM diesel_schema_migrations \
              WHERE run_on < DATETIME('now', '+1 hour'))",
         ))
         .get_result(&mut db.conn())
@@ -77,7 +77,7 @@ fn migration_run_inserts_run_on_timestamps() {
     #[cfg(feature = "postgres")]
     fn valid_run_on_timestamp(db: &database::Database) -> bool {
         select(sql::<Bool>(
-            "EXISTS (SELECT 1 FROM __diesel_schema_migrations \
+            "EXISTS (SELECT 1 FROM diesel_schema_migrations \
              WHERE run_on < NOW() + INTERVAL '1 hour')",
         ))
         .get_result(&mut db.conn())
@@ -87,7 +87,7 @@ fn migration_run_inserts_run_on_timestamps() {
     #[cfg(feature = "mysql")]
     fn valid_run_on_timestamp(db: &database::Database) -> bool {
         select(sql::<Bool>(
-            "EXISTS (SELECT 1 FROM __diesel_schema_migrations \
+            "EXISTS (SELECT 1 FROM diesel_schema_migrations \
              WHERE run_on < NOW() + INTERVAL 1 HOUR)",
         ))
         .get_result(&mut db.conn())

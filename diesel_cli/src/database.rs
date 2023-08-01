@@ -205,7 +205,7 @@ fn create_default_migration_if_needed(
     Ok(())
 }
 
-/// Creates the `__diesel_schema_migrations` table if it doesn't exist. If the
+/// Creates the `diesel_schema_migrations` table if it doesn't exist. If the
 /// table didn't exist, it also runs any pending migrations. Returns a
 /// `DatabaseError::ConnectionError` if it can't create the table, and exits
 /// with a migration error if it can't run migrations.
@@ -299,7 +299,7 @@ fn mysql_database_exists(conn: &mut MysqlConnection, database_name: &str) -> Que
         .map(|x| x.is_some())
 }
 
-/// Returns true if the `__diesel_schema_migrations` table exists in the
+/// Returns true if the `diesel_schema_migrations` table exists in the
 /// database we connect to, returns false if it does not.
 pub fn schema_table_exists(database_url: &str) -> DatabaseResult<bool> {
     match InferConnection::establish(database_url).unwrap() {
@@ -308,7 +308,7 @@ pub fn schema_table_exists(database_url: &str) -> DatabaseResult<bool> {
             "EXISTS \
              (SELECT 1 \
              FROM information_schema.tables \
-             WHERE table_name = '__diesel_schema_migrations')",
+             WHERE table_name = 'diesel_schema_migrations')",
         ))
         .get_result(&mut conn),
         #[cfg(feature = "sqlite")]
@@ -317,7 +317,7 @@ pub fn schema_table_exists(database_url: &str) -> DatabaseResult<bool> {
              (SELECT 1 \
              FROM sqlite_master \
              WHERE type = 'table' \
-             AND name = '__diesel_schema_migrations')",
+             AND name = 'diesel_schema_migrations')",
         ))
         .get_result(&mut conn),
         #[cfg(feature = "mysql")]
@@ -325,7 +325,7 @@ pub fn schema_table_exists(database_url: &str) -> DatabaseResult<bool> {
             "EXISTS \
                     (SELECT 1 \
                      FROM information_schema.tables \
-                     WHERE table_name = '__diesel_schema_migrations'
+                     WHERE table_name = 'diesel_schema_migrations'
                      AND table_schema = DATABASE())",
         ))
         .get_result(&mut conn),

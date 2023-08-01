@@ -176,7 +176,7 @@ impl<'a, DB: Backend> Migration<DB> for &'a dyn Migration<DB> {
     }
 }
 
-/// Create table statement for the `__diesel_schema_migrations` used
+/// Create table statement for the `diesel_schema_migrations` used
 /// used by the postgresql, sqlite and mysql backend
 pub const CREATE_MIGRATIONS_TABLE: &str = include_str!("setup_migration_table.sql");
 
@@ -188,7 +188,7 @@ pub trait MigrationConnection: Connection {
     ///
     /// ```rust
     /// diesel::table! {
-    ///      __diesel_schema_migrations(version) {
+    ///      diesel_schema_migrations(version) {
     ///          version -> Text,
     ///          /// defaults to `CURRENT_TIMESTAMP`
     ///          run_on -> Timestamp,

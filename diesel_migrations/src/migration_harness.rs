@@ -17,7 +17,7 @@ use std::io::Write;
 use crate::errors::MigrationError;
 
 diesel::table! {
-    __diesel_schema_migrations (version) {
+    diesel_schema_migrations (version) {
         version -> VarChar,
         run_on -> Timestamp,
     }
@@ -158,22 +158,22 @@ where
     DB: Backend,
     C: Connection<Backend = DB> + MigrationConnection + 'static,
     dsl::Order<
-        dsl::Select<__diesel_schema_migrations::table, __diesel_schema_migrations::version>,
-        dsl::Desc<__diesel_schema_migrations::version>,
+        dsl::Select<diesel_schema_migrations::table, diesel_schema_migrations::version>,
+        dsl::Desc<diesel_schema_migrations::version>,
     >: LoadQuery<'b, C, MigrationVersion<'static>>,
     for<'a> InsertStatement<
-        __diesel_schema_migrations::table,
-        <dsl::Eq<__diesel_schema_migrations::version, MigrationVersion<'static>> as Insertable<
-            __diesel_schema_migrations::table,
+        diesel_schema_migrations::table,
+        <dsl::Eq<diesel_schema_migrations::version, MigrationVersion<'static>> as Insertable<
+            diesel_schema_migrations::table,
         >>::Values,
     >: diesel::query_builder::QueryFragment<DB> + ExecuteDsl<C, DB>,
     DeleteStatement<
         <dsl::Find<
-            __diesel_schema_migrations::table,
+            diesel_schema_migrations::table,
             MigrationVersion<'static>,
         > as HasTable>::Table,
         <dsl::Find<
-            __diesel_schema_migrations::table,
+            diesel_schema_migrations::table,
             MigrationVersion<'static>,
         > as IntoUpdateTarget>::WhereClause,
     >: ExecuteDsl<C>,
@@ -185,8 +185,8 @@ where
     ) -> Result<MigrationVersion<'static>> {
         let apply_migration = |conn: &mut C| -> Result<()> {
             migration.run(conn)?;
-            diesel::insert_into(__diesel_schema_migrations::table)
-                .values(__diesel_schema_migrations::version.eq(migration.name().version().as_owned())).execute(conn)?;
+            diesel::insert_into(diesel_schema_migrations::table)
+                .values(diesel_schema_migrations::version.eq(migration.name().version().as_owned())).execute(conn)?;
             Ok(())
         };
 
@@ -204,7 +204,7 @@ where
     ) -> Result<MigrationVersion<'static>> {
         let revert_migration = |conn: &mut C| -> Result<()> {
             migration.revert(conn)?;
-            diesel::delete(__diesel_schema_migrations::table.find(migration.name().version().as_owned()))
+            diesel::delete(diesel_schema_migrations::table.find(migration.name().version().as_owned()))
                .execute(conn)?;
             Ok(())
         };
@@ -219,9 +219,9 @@ where
 
     fn applied_migrations(&mut self) -> Result<Vec<MigrationVersion<'static>>> {
         setup_database(self)?;
-        Ok(__diesel_schema_migrations::table
-            .select(__diesel_schema_migrations::version)
-            .order(__diesel_schema_migrations::version.desc())
+        Ok(diesel_schema_migrations::table
+            .select(diesel_schema_migrations::version)
+            .order(diesel_schema_migrations::version.desc())
             .load(self)?)
     }
 }

@@ -36,7 +36,7 @@ fn database_setup_creates_schema_table() {
     let result = p.command("database").arg("setup").run();
 
     assert!(result.is_success(), "Result was unsuccessful {:?}", result);
-    assert!(db.table_exists("__diesel_schema_migrations"));
+    assert!(db.table_exists("diesel_schema_migrations"));
 }
 
 #[test]

@@ -43,7 +43,7 @@ fn reset_runs_database_setup() {
     assert!(result.is_success(), "Result was unsuccessful {:?}", result);
     assert!(!db.table_exists("posts"));
     assert!(db.table_exists("users"));
-    assert!(db.table_exists("__diesel_schema_migrations"));
+    assert!(db.table_exists("diesel_schema_migrations"));
 }
 
 #[test]
@@ -118,7 +118,7 @@ fn reset_works_with_migration_dir_by_arg() {
     assert!(result.is_success(), "Result was unsuccessful {:?}", result);
     assert!(!db.table_exists("posts"));
     assert!(db.table_exists("users"));
-    assert!(db.table_exists("__diesel_schema_migrations"));
+    assert!(db.table_exists("diesel_schema_migrations"));
 }
 
 #[test]
@@ -150,7 +150,7 @@ fn reset_works_with_migration_dir_by_env() {
     assert!(result.is_success(), "Result was unsuccessful {:?}", result);
     assert!(!db.table_exists("posts"));
     assert!(db.table_exists("users"));
-    assert!(db.table_exists("__diesel_schema_migrations"));
+    assert!(db.table_exists("diesel_schema_migrations"));
 }
 
 #[test]
@@ -227,5 +227,5 @@ fn reset_respects_migrations_dir_from_diesel_toml() {
 
     assert!(result.is_success(), "Result was unsuccessful {:?}", result);
     assert!(db.table_exists("users"));
-    assert!(db.table_exists("__diesel_schema_migrations"));
+    assert!(db.table_exists("diesel_schema_migrations"));
 }

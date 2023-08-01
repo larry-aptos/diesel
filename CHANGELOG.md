@@ -1849,7 +1849,7 @@ queries or set `PIPES_AS_CONCAT` manually.
 
 ### Changed
 
-* Diesel CLI will no longer output notices about `__diesel_schema_migrations`
+* Diesel CLI will no longer output notices about `diesel_schema_migrations`
   already existing.
 
 * Relicensed under MIT/Apache dual

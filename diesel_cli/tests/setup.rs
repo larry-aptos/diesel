@@ -75,7 +75,7 @@ fn setup_creates_schema_table() {
     let result = p.command("setup").run();
 
     assert!(result.is_success(), "Result was unsuccessful {:?}", result);
-    assert!(db.table_exists("__diesel_schema_migrations"));
+    assert!(db.table_exists("diesel_schema_migrations"));
 }
 
 #[test]
@@ -112,7 +112,7 @@ fn setup_doesnt_run_migrations_if_schema_table_exists() {
         .folder("migrations")
         .build();
     let db = database(&p.database_url()).create();
-    db.execute("CREATE TABLE __diesel_schema_migrations ( version INTEGER )");
+    db.execute("CREATE TABLE diesel_schema_migrations ( version INTEGER )");
 
     p.create_migration(
         "12345_create_users_table",
