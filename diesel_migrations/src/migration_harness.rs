@@ -19,7 +19,7 @@ use crate::errors::MigrationError;
 diesel::table! {
     diesel_schema_migrations (version) {
         version -> VarChar,
-        run_on -> Timestamp,
+        run_on -> Timestamptz,
     }
 }
 
