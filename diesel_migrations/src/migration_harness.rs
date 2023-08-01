@@ -185,16 +185,21 @@ where
     ) -> Result<MigrationVersion<'static>> {
         let apply_migration = |conn: &mut C| -> Result<()> {
             migration.run(conn)?;
+            println!("Migration AAA {} applied", migration.name().version());
             diesel::insert_into(diesel_schema_migrations::table)
                 .values(diesel_schema_migrations::version.eq(migration.name().version().as_owned())).execute(conn)?;
+            println!("Migration BBB {} recorded as applied", migration.name().version());
             Ok(())
         };
-
+        println!("Running migration CCC {}", migration.name().version());
         if migration.metadata().run_in_transaction() {
+            println!("Running migration DDD {}", migration.name().version());
             self.transaction(apply_migration)?;
+            println!("Running migration EEE {}", migration.name().version());
         } else {
             apply_migration(self)?;
         }
+        println!("Running migration FFF {}", migration.name().version());
         Ok(migration.name().version().as_owned())
     }
 
